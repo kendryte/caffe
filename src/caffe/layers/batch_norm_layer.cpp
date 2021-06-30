@@ -103,15 +103,6 @@ void BatchNormLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
         this->blobs_[0]->cpu_data(), mean_.mutable_cpu_data());
     caffe_cpu_scale(variance_.count(), scale_factor,
         this->blobs_[1]->cpu_data(), variance_.mutable_cpu_data());
-  } else {
-    // compute mean
-    caffe_cpu_gemv<Dtype>(CblasNoTrans, channels_ * num, spatial_dim,
-        1. / (num * spatial_dim), bottom_data,
-        spatial_sum_multiplier_.cpu_data(), 0.,
-        num_by_chans_.mutable_cpu_data());
-    caffe_cpu_gemv<Dtype>(CblasTrans, num, channels_, 1.,
-        num_by_chans_.cpu_data(), batch_sum_multiplier_.cpu_data(), 0.,
-        mean_.mutable_cpu_data());
   }
 
   // subtract mean
@@ -122,29 +113,7 @@ void BatchNormLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
       spatial_dim, 1, -1, num_by_chans_.cpu_data(),
       spatial_sum_multiplier_.cpu_data(), 1., top_data);
 
-  if (!use_global_stats_) {
-    // compute variance using var(X) = E((X-EX)^2)
-    caffe_sqr<Dtype>(top[0]->count(), top_data,
-                     temp_.mutable_cpu_data());  // (X-EX)^2
-    caffe_cpu_gemv<Dtype>(CblasNoTrans, channels_ * num, spatial_dim,
-        1. / (num * spatial_dim), temp_.cpu_data(),
-        spatial_sum_multiplier_.cpu_data(), 0.,
-        num_by_chans_.mutable_cpu_data());
-    caffe_cpu_gemv<Dtype>(CblasTrans, num, channels_, 1.,
-        num_by_chans_.cpu_data(), batch_sum_multiplier_.cpu_data(), 0.,
-        variance_.mutable_cpu_data());  // E((X_EX)^2)
 
-    // compute and save moving average
-    this->blobs_[2]->mutable_cpu_data()[0] *= moving_average_fraction_;
-    this->blobs_[2]->mutable_cpu_data()[0] += 1;
-    caffe_cpu_axpby(mean_.count(), Dtype(1), mean_.cpu_data(),
-        moving_average_fraction_, this->blobs_[0]->mutable_cpu_data());
-    int m = bottom[0]->count()/channels_;
-    Dtype bias_correction_factor = m > 1 ? Dtype(m)/(m-1) : 1;
-    caffe_cpu_axpby(variance_.count(), bias_correction_factor,
-        variance_.cpu_data(), moving_average_fraction_,
-        this->blobs_[1]->mutable_cpu_data());
-  }
 
   // normalize variance
   caffe_add_scalar(variance_.count(), eps_, variance_.mutable_cpu_data());

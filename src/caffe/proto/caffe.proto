@@ -378,7 +378,7 @@ message LayerParameter {
   optional ArgMaxParameter argmax_param = 103;
   optional BatchNormParameter batch_norm_param = 139;
   optional BiasParameter bias_param = 141;
-  optional ClipParameter clip_param = 148;
+  // optional ClipParameter clip_param = 148;
   optional ConcatParameter concat_param = 104;
   optional ContrastiveLossParameter contrastive_loss_param = 105;
   optional ConvolutionParameter convolution_param = 106;
@@ -421,6 +421,34 @@ message LayerParameter {
   optional ThresholdParameter threshold_param = 128;
   optional TileParameter tile_param = 138;
   optional WindowDataParameter window_data_param = 129;
+  optional CtcLossParameter ctc_loss_param = 200;
+  optional ContinuationIndicatorParameter continuation_indicator_param = 201;
+  optional PermuteParameter permute_param = 202;
+  optional LabelsequenceAccuracyParameter labelsequence_accuracy_param = 203;
+  optional ReverseParameter reverse_param = 204;
+}
+message ReverseParameter {
+  optional uint32 axis = 1 [default = 0];
+}
+message CtcLossParameter {
+  optional uint32 alphabet_size = 1 [default = 0];
+  optional uint32 time_step = 3 [default = 0];
+  optional int32 blank_label = 4 [default = 0];
+}
+message ContinuationIndicatorParameter {
+  optional uint32 time_step = 1 [default = 0];
+  optional uint32 batch_size = 2 [default = 0];
+}
+
+message PermuteParameter {
+    // The new orders of the axes of data. Notice it should be with
+    // in the same range as the input data, and it starts from 0.
+    // Do not provide repeated order.
+    repeated uint32 order = 1;
+}
+
+message LabelsequenceAccuracyParameter {
+optional int32 blank_label = 1 [default = 0];
 }
 
 // Message that stores parameters used to apply transformation
@@ -507,10 +535,10 @@ message ArgMaxParameter {
 }
 
 // Message that stores parameters used by ClipLayer
-message ClipParameter {
-  required float min = 1;
-  required float max = 2;
-}
+// message ClipParameter {
+//   required float min = 1;
+//   required float max = 2;
+// }
 
 message ConcatParameter {
   // The axis along which to concatenate -- may be negative to index from the
@@ -1299,6 +1327,7 @@ message V1LayerParameter {
     TANH = 23;
     WINDOW_DATA = 24;
     THRESHOLD = 31;
+    REVERSE = 40;
   }
   optional LayerType type = 5;
   repeated BlobProto blobs = 6;
@@ -1342,6 +1371,7 @@ message V1LayerParameter {
   optional TransformationParameter transform_param = 36;
   optional LossParameter loss_param = 42;
   optional V0LayerParameter layer = 1;
+  optional ReverseParameter reverse_param = 43;
 }
 
 // DEPRECATED: V0LayerParameter is the old way of specifying layer parameters
@@ -1436,6 +1466,9 @@ message V0LayerParameter {
   optional uint32 concat_dim = 65 [default = 1];
 
   optional HDF5OutputParameter hdf5_output_param = 1001;
+
+  //For reverse layer
+  optional uint32 axis = 66 [default = 0];
 }
 
 message PReLUParameter {
