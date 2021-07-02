@@ -16,6 +16,11 @@ add_definitions(-DCAFFE_VERSION=${CAFFE_TARGET_VERSION})
 
 # ---[ Using cmake scripts and modules
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules)
+include(cmake/conan.cmake)
+        conan_cmake_run(CONANFILE conanfile.txt
+                        BASIC_SETUP
+                        SETTINGS compiler.cppstd=20
+                        BUILD missing)
 
 include(ExternalProject)
 include(GNUInstallDirs)
