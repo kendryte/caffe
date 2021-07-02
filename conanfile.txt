@@ -11,6 +11,7 @@ boost/1.76.0
 openblas/0.3.15
 opencv/4.5.1
 gtk/4.1.2
+egl/system
 
 [options]
 
