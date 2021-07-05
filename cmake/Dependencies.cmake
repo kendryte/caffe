@@ -145,10 +145,10 @@ endif()
 
 # ---[ Python
 if(BUILD_python)
-  if(NOT "${python_version}" VERSION_LESS "3.0.0")
+  if(NOT "${python_version}" VERSION_LESS "3.7.0")
     # use python3
-    find_package(PythonInterp 3.0)
-    find_package(PythonLibs 3.0)
+    find_package(PythonInterp 3.7)
+    find_package(PythonLibs 3.7)
     find_package(NumPy 1.7.1)
     # Find the matching boost python implementation
     set(version ${PYTHONLIBS_VERSION_STRING})
@@ -174,8 +174,8 @@ if(BUILD_python)
     endif()
   else()
     # disable Python 3 search
-    find_package(PythonInterp 2.7)
-    find_package(PythonLibs 2.7)
+    find_package(PythonInterp 3.7)
+    find_package(PythonLibs 3.7)
     find_package(NumPy 1.7.1)
     find_package(Boost 1.46 COMPONENTS python)
   endif()
