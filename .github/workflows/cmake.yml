@@ -51,7 +51,7 @@ jobs:
 
     - name: Build
       # Build your program with the given configuration
-      run: cd Build && cmake .. && make all && make install
+      run: cd ${{github.workspace}}/build && cmake .. && make all && make install
         
 
     - name: Test
