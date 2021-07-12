@@ -19,7 +19,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: seanmiddleditch/gha-setup-ninja@master
 
     - name: Install System Requirements
       if: runner.os == 'Linux'
@@ -29,21 +28,12 @@ jobs:
         sudo apt install gcc-10 g++-10
         sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 40
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 40
-        sudo apt-get install build-essential -y
-        sudo apt-get install libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev -y
-        sudo apt-get install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev -y
         sudo apt-get install libegl1-mesa-dev -y
         sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler -y
         sudo apt-get install --no-install-recommends libboost-all-dev -y
         sudo apt-get install libopenblas-dev liblapack-dev libatlas-base-dev -y
         sudo apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev -y
         sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libboost-all-dev libhdf5-serial-dev libgflags-dev libgoogle-glog-dev liblmdb-dev protobuf-compiler libatlas-base-dev -y
-        wget -c https://github.com/opencv/opencv/archive/refs/tags/4.5.1.zip
-        unzip 4.5.1.zip && rm 4.5.1.zip
-        wget -c https://github.com/opencv/opencv_contrib/archive/refs/tags/4.5.1.zip
-        unzip 4.5.1.zip && rm 4.5.1.zip
-        cd opencv-4.5.1 && mkdir build && cd build && cmake -G Ninja -D CMAKE_INSTALL_PREFIX=/usr/local -D CMAKE_BUILD_TYPE=Release -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-4.5.1/modules ..
-        cmake --build . && cmake --install ../build
 
     - name: Setup Python
       uses: actions/setup-python@v2.2.1
@@ -58,8 +48,8 @@ jobs:
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      run: cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF ..
 
     - name: Build
       # Build your program with the given configuration
-      run: cd ${{github.workspace}}/build && export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH && sudo make all && sudo make pycaffe
+      run: cd ${{github.workspace}}/build && sudo make all && sudo make pycaffe
