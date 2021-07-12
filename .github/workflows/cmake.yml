@@ -24,8 +24,8 @@ jobs:
       if: runner.os == 'Linux'
       shell: bash
       run: |
-        sudo apt update
-        sudo apt install libegl-dev -y
+        sudo apt-get update
+        sudo apt-get install libegl-dev -y
         sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler -y
         sudo apt-get install --no-install-recommends libboost-all-dev -y
         sudo apt-get install libopenblas-dev liblapack-dev libatlas-base-dev -y
