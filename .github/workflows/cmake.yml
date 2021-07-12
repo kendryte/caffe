@@ -24,23 +24,25 @@ jobs:
       if: runner.os == 'Linux'
       shell: bash
       run: |
-        sudo apt-get update
-        sudo apt-get install build-essential
-        sudo apt-get install libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
-        sudo apt-get install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev
-        sudo apt-get install libegl1-mesa-dev -y
-        sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler -y
-        sudo apt-get install --no-install-recommends libboost-all-dev -y
-        sudo apt-get install libopenblas-dev liblapack-dev libatlas-base-dev -y
-        sudo apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev -y
-        sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libboost-all-dev libhdf5-serial-dev libgflags-dev libgoogle-glog-dev liblmdb-dev protobuf-compiler libatlas-base-dev -y
+        apt-get update
+        apt install gcc-10 g++-10
+        update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 40
+        update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 40
+        apt-get install build-essential -y
+        apt-get install libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev -y
+        apt-get install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev -y
+        apt-get install libegl1-mesa-dev -y
+        apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler -y
+        apt-get install --no-install-recommends libboost-all-dev -y
+        apt-get install libopenblas-dev liblapack-dev libatlas-base-dev -y
+        apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev -y
+        apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libboost-all-dev libhdf5-serial-dev libgflags-dev libgoogle-glog-dev liblmdb-dev protobuf-compiler libatlas-base-dev -y
         wget -c https://github.com/opencv/opencv/archive/refs/tags/4.5.1.zip
         unzip 4.5.1.zip && rm 4.5.1.zip
         wget -c https://github.com/opencv/opencv_contrib/archive/refs/tags/4.5.1.zip
         unzip 4.5.1.zip && rm 4.5.1.zip
         cd opencv-4.5.1 && mkdir build && cd build && cmake -D CMAKE_INSTALL_PREFIX=/usr/local -D CMAKE_BUILD_TYPE=Release -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-4.5.1/modules ..
-        make -j && sudo make install
-        export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+        make -j && make install
 
     - name: Setup Python
       uses: actions/setup-python@v2.2.1
@@ -59,10 +61,4 @@ jobs:
 
     - name: Build
       # Build your program with the given configuration
-      run: cd ${{github.workspace}}/build && cmake .. && make all && make pycaffe
-
-    - name: Test
-      working-directory: ${{github.workspace}}/build
-      # Execute tests defined by the CMake configuration.  
-      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: make runtest
+      run: cd ${{github.workspace}}/build && export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH && make all && make pycaffe
