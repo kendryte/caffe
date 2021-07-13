@@ -11,7 +11,9 @@
 #include "caffe/common.hpp"
 #include "caffe/proto/caffe.pb.h"
 #include "caffe/util/format.hpp"
+#ifdef USE_OPENCV
 #include "opencv2/imgcodecs/legacy/constants_c.h"
+#endif
 #ifndef CAFFE_TMP_DIR_RETRIES
 #define CAFFE_TMP_DIR_RETRIES 100
 #endif
