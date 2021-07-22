@@ -26,8 +26,8 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt install gcc-10 g++-10
-        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 40
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 40
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 50
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 50
         sudo apt-get install libegl1-mesa-dev -y
         sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler -y
         sudo apt-get install --no-install-recommends libboost-all-dev -y
