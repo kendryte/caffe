@@ -33,7 +33,6 @@ jobs:
         sudo apt-get install --no-install-recommends libboost-all-dev -y
         sudo apt-get install libopenblas-dev liblapack-dev libatlas-base-dev -y
         sudo apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev -y
-        sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libboost-all-dev libhdf5-serial-dev libgflags-dev libgoogle-glog-dev liblmdb-dev protobuf-compiler libatlas-base-dev -y
 
     - name: Setup Python
       uses: actions/setup-python@v2.2.1
@@ -57,6 +56,13 @@ jobs:
       # Build your program with the given configuration
       run: cd ${{github.workspace}}/build && sudo make all && sudo make pycaffe
 
-    # - name: Generate Package
-    #   # generate warpctc-caffe pip package as an artifactory, need to be enabled for nncase
-    #   run: cd ${{github.workspace}}/python && python setup.py sdist
+    - name: Generate Package
+      # generate warpctc-caffe pip package as an artifactory, need for nncase
+      run: cd ${{github.workspace}}/python && python setup.py sdist
+
+    - name: Upload a Python Package Artifact
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: warpctc-caffe-1.0.0
+        path: ${{github.workspace}}/python/dist
+        if-no-files-found: error
