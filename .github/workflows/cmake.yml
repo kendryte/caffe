@@ -73,6 +73,14 @@ jobs:
         path: ${{github.workspace}}/build/lib/libcaffe.so.1.0.0
         if-no-files-found: error
 
+    - name: Upload a Build Artifact
+      if: runner.os == 'Linux'
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: caffe
+        path: ${{github.workspace}}/build/lib/_caffe.so
+        if-no-files-found: error
+
     - name: Install cibuildwheel
       shell: bash
       run: pip install cibuildwheel==2.0.1
