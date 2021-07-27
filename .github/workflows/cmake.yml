@@ -95,7 +95,7 @@ jobs:
         CIBW_PLATFORM: "linux"
         CIBW_BUILD: "cp37-*"
         CIBW_ARCHS_LINUX: "x86_64"
-        CIBW_REPAIR_WHEEL_COMMAND_LINUX: "auditwheel repair --lib-sdir . -w {dest_dir} {wheel}"
+        CIBW_REPAIR_WHEEL_COMMAND: ""
 
     - name: Upload a Build Artifact
       if: runner.os == 'Linux'
