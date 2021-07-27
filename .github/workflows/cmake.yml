@@ -16,6 +16,11 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-18.04]
+        manylinux_image: [manylinux1]
+        include:
+          - os: ubuntu-18.04
+            bitness: 64
+            platform_id: manylinux_x86_64
 
     steps:
     - uses: actions/checkout@v2
@@ -45,6 +50,8 @@ jobs:
         pip install numpy==1.19.2
 
     - name: Configure CMake
+      if: runner.os == 'Linux'
+      shell: bash
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: |
@@ -53,23 +60,39 @@ jobs:
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF
 
     - name: Build
+      if: runner.os == 'Linux'
+      shell: bash
       # Build your program with the given configuration
       run: cd ${{github.workspace}}/build && sudo make all && sudo make pycaffe
 
-    - name: Generate Package
-      # generate warpctc-caffe pip package as an artifactory, need for nncase
-      run: cd ${{github.workspace}}/python && python setup.py sdist
-
-    - name: Upload a Python Package Artifact
-      uses: actions/upload-artifact@v2.2.2
-      with:
-        name: warpctc-caffe-1.0.0
-        path: ${{github.workspace}}/python/dist
-        if-no-files-found: error
-
     - name: Upload a Build Artifact
+      if: runner.os == 'Linux'
       uses: actions/upload-artifact@v2.2.2
       with:
         name: libcaffe
         path: ${{github.workspace}}/build/lib/libcaffe.so.1.0.0
+        if-no-files-found: error
+
+    - name: Install cibuildwheel
+      shell: bash
+      run: pip install cibuildwheel==2.0.1
+
+    - name: Build wheels
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        cd ${{github.workspace}}/python && mkdir wheelhouse
+        python -m cibuildwheel --output-dir wheelhouse
+      env:
+        CIBW_PLATFORM: "linux"
+        CIBW_BUILD: "cp37-*"
+        CIBW_ARCHS_LINUX: "x86_64"
+        CIBW_REPAIR_WHEEL_COMMAND: ""
+
+    - name: Upload a Build Artifact
+      if: runner.os == 'Linux'
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: warpctc-caffe
+        path: ./python/wheelhouse/*.whl
         if-no-files-found: error
