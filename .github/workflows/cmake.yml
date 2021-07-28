@@ -46,14 +46,8 @@ jobs:
       run: |
         brew install -vd snappy leveldb gflags glog szip lmdb
         brew install hdf5 opencv openblas
-        brew install boost@1.59 boost-python@1.59
-        wget -c https://github.com/protocolbuffers/protobuf/archive/v3.5.1.zip
-        unzip protobuf-3.5.1.zip
-        cd protobuf-3.5.1
-        ./autogen.sh
-        ./configure
-        make
-        make install
+        brew install -vd protobuf
+        brew install -vd boost boost-python
 
     - name: Setup Python
       uses: actions/setup-python@v2.2.1
