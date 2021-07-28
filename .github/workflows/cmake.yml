@@ -45,11 +45,15 @@ jobs:
       shell: bash
       run: |
         brew install -vd snappy leveldb gflags glog szip lmdb
-        brew tap brewsci/bio
-        brew tap brewsci/science
-        brew install hdf5 opencv
-        brew install --build-from-source -vd protobuf
-        brew install --build-from-source -vd boost boost-python
+        brew install hdf5 opencv openblas
+        brew install boost@1.59 boost-python@1.59
+        wget -c https://github.com/protocolbuffers/protobuf/archive/v3.5.1.zip
+        unzip protobuf-3.5.1.zip
+        cd protobuf-3.5.1
+        ./autogen.sh
+        ./configure
+        make
+        make install
 
     - name: Setup Python
       uses: actions/setup-python@v2.2.1
