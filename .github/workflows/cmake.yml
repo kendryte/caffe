@@ -50,9 +50,16 @@ jobs:
         brew install -vd boost boost-python3
 
     - name: Setup Python
+      if: runner.os != 'Macos'
       uses: actions/setup-python@v2.2.1
       with:
         python-version: 3.7
+
+    - name: Setup Python
+      if: runner.os == 'Macos'
+      uses: actions/setup-python@v2.2.1
+      with:
+        python-version: 3.9
 
     - name: Install Numpy
       shell: bash
