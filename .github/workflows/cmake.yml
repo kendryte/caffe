@@ -47,7 +47,7 @@ jobs:
         brew install -vd snappy leveldb gflags glog szip lmdb
         brew install hdf5 opencv openblas
         brew install -vd protobuf
-        brew install -vd boost boost-python
+        brew install boost boost-python3
 
     - name: Setup Python
       uses: actions/setup-python@v2.2.1
