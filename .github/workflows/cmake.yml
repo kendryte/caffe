@@ -139,7 +139,9 @@ jobs:
         cd ${{github.workspace}}/python && mkdir wheelhouse
         python -m cibuildwheel --output-dir wheelhouse
       env:
+        CIBW_BEFORE_ALL: "export MACOSX_DEPLOYMENT_TARGET=10.15"
         CIBW_PLATFORM: "macos"
+        CIBW_BUILD: "cp37-*"
         CIBW_ARCHS_MACOS: "x86_64"
         CIBW_REPAIR_WHEEL_COMMAND: ""
 
