@@ -15,11 +15,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-10.15]
+        os: [ubuntu-18.04, macos-10.15]
         include:
-          # - os: ubuntu-18.04
-          #   bitness: 64
-          #   platform_id: manylinux_x86_64
+          - os: ubuntu-18.04
+            bitness: 64
+            platform_id: manylinux_x86_64
           - os: macos-10.15
             bitness: 64
 
@@ -83,22 +83,37 @@ jobs:
       # Build your program with the given configuration
       run: |
         cd ${{github.workspace}}/build && sudo make all && sudo make pycaffe
-        ls ${{github.workspace}}/build/lib
 
     - name: Upload a Build Artifact
       if: runner.os == 'Linux'
       uses: actions/upload-artifact@v2.2.2
       with:
-        name: libcaffe
+        name: libcaffe-linux
         path: ${{github.workspace}}/build/lib/libcaffe.so.1.0.0
+        if-no-files-found: error
+
+    - name: Upload a Build Artifact
+      if: runner.os == 'Macos'
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: libcaffe-macos
+        path: ${{github.workspace}}/build/lib/libcaffe.1.0.0.dylib
         if-no-files-found: error
 
     - name: Upload a Build Artifact
       if: runner.os == 'Linux'
       uses: actions/upload-artifact@v2.2.2
       with:
-        name: caffe
+        name: caffe-linux
         path: ${{github.workspace}}/build/lib/_caffe.so
+        if-no-files-found: error
+
+    - name: Upload a Build Artifact
+      if: runner.os == 'Macos'
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: caffe-macos
+        path: ${{github.workspace}}/build/lib/_caffe.dylib
         if-no-files-found: error
 
     - name: Install cibuildwheel
@@ -117,10 +132,30 @@ jobs:
         CIBW_ARCHS_LINUX: "x86_64"
         CIBW_REPAIR_WHEEL_COMMAND: ""
 
+    - name: Build wheels
+      if: runner.os == 'Macos'
+      shell: bash
+      run: |
+        cd ${{github.workspace}}/python && mkdir wheelhouse
+        python -m cibuildwheel --output-dir wheelhouse
+      env:
+        CIBW_PLATFORM: "macos"
+        CIBW_BUILD: "cp37-*"
+        CIBW_ARCHS_MACOS: "x86_64"
+        CIBW_REPAIR_WHEEL_COMMAND: ""
+
     - name: Upload a Build Artifact
       if: runner.os == 'Linux'
       uses: actions/upload-artifact@v2.2.2
       with:
-        name: warpctc-caffe
+        name: warpctc-caffe-linux
+        path: ./python/wheelhouse/*.whl
+        if-no-files-found: error
+
+    - name: Upload a Build Artifact
+      if: runner.os == 'Macos'
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: warpctc-caffe-macos
         path: ./python/wheelhouse/*.whl
         if-no-files-found: error
