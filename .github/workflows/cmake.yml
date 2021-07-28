@@ -45,7 +45,7 @@ jobs:
       shell: bash
       run: |
         brew install -vd snappy leveldb gflags glog szip lmdb
-        brew install hdf5 opencv openblas
+        brew install hdf5 openblas
         brew install -vd protobuf
         brew install -vd boost boost-python3
 
@@ -140,7 +140,6 @@ jobs:
         python -m cibuildwheel --output-dir wheelhouse
       env:
         CIBW_PLATFORM: "macos"
-        CIBW_BUILD: "cp37-*"
         CIBW_ARCHS_MACOS: "x86_64"
         CIBW_REPAIR_WHEEL_COMMAND: ""
 
