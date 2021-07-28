@@ -15,12 +15,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04]
+        os: [macos-10.15]
         manylinux_image: [manylinux1]
         include:
           - os: ubuntu-18.04
             bitness: 64
             platform_id: manylinux_x86_64
+          - os: macos-10.15
+            bitness: 64
 
     steps:
     - uses: actions/checkout@v2
@@ -39,6 +41,16 @@ jobs:
         sudo apt-get install libopenblas-dev liblapack-dev libatlas-base-dev -y
         sudo apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev -y
 
+    - name: Install System Requirements
+      if: runner.os == 'Macos'
+      shell: bash
+      run: |
+        brew install -vd snappy leveldb gflags glog szip lmdb
+        brew tap homebrew/science
+        brew install hdf5 opencv
+        brew install --build-from-source --with-python -vd protobuf
+        brew install --build-from-source -vd boost boost-python
+
     - name: Setup Python
       uses: actions/setup-python@v2.2.1
       with:
@@ -50,7 +62,7 @@ jobs:
         pip install numpy==1.19.2
 
     - name: Configure CMake
-      if: runner.os == 'Linux'
+      if: runner.os != 'Windows'
       shell: bash
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
@@ -60,10 +72,12 @@ jobs:
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF
 
     - name: Build
-      if: runner.os == 'Linux'
+      if: runner.os != 'Windows'
       shell: bash
       # Build your program with the given configuration
-      run: cd ${{github.workspace}}/build && sudo make all && sudo make pycaffe
+      run: |
+        cd ${{github.workspace}}/build && sudo make all && sudo make pycaffe
+        ls ${{github.workspace}}/build/lib
 
     - name: Upload a Build Artifact
       if: runner.os == 'Linux'
