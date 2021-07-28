@@ -48,7 +48,7 @@ jobs:
         brew tap brewsci/bio
         brew tap brewsci/science
         brew install hdf5 opencv
-        brew install --build-from-source --with-python -vd protobuf
+        brew install --build-from-source -vd protobuf
         brew install --build-from-source -vd boost boost-python
 
     - name: Setup Python
