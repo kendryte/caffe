@@ -45,6 +45,8 @@ jobs:
       shell: bash
       run: |
         brew install -vd snappy leveldb gflags glog szip lmdb
+        brew tap brewsci/bio
+        brew tap brewsci/science
         brew install hdf5 opencv
         brew install --build-from-source --with-python -vd protobuf
         brew install --build-from-source -vd boost boost-python
@@ -53,7 +55,7 @@ jobs:
       uses: actions/setup-python@v2.2.1
       with:
         python-version: 3.7
-        
+
     - name: Install Numpy
       shell: bash
       run: |
