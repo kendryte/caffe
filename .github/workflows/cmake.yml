@@ -16,11 +16,10 @@ jobs:
     strategy:
       matrix:
         os: [macos-10.15]
-        manylinux_image: [manylinux1]
         include:
-          - os: ubuntu-18.04
-            bitness: 64
-            platform_id: manylinux_x86_64
+          # - os: ubuntu-18.04
+          #   bitness: 64
+          #   platform_id: manylinux_x86_64
           - os: macos-10.15
             bitness: 64
 
@@ -46,7 +45,6 @@ jobs:
       shell: bash
       run: |
         brew install -vd snappy leveldb gflags glog szip lmdb
-        brew tap homebrew/science
         brew install hdf5 opencv
         brew install --build-from-source --with-python -vd protobuf
         brew install --build-from-source -vd boost boost-python
