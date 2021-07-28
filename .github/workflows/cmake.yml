@@ -62,9 +62,16 @@ jobs:
         python-version: 3.9
 
     - name: Install Numpy
+      if: runner.os != 'Macos'
       shell: bash
       run: |
         pip install numpy==1.19.2
+
+    - name: Install Numpy
+      if: runner.os == 'Macos'
+      shell: bash
+      run: |
+        pip install numpy==1.18.0
 
     - name: Configure CMake
       if: runner.os == 'Linux'
