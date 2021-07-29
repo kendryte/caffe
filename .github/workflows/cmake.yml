@@ -52,7 +52,7 @@ jobs:
         CIBW_BEFORE_BUILD_LINUX: >
           apt-get update &&
           apt-get install libegl1-mesa-dev -y &&
-          apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler -y &&
+          apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libhdf5-serial-dev protobuf-compiler -y &&
           apt-get install --no-install-recommends libboost-all-dev -y &&
           apt-get install libopenblas-dev liblapack-dev libatlas-base-dev -y &&
           apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev -y &&
@@ -99,6 +99,14 @@ jobs:
       with:
         name: warpctc-caffe-linux
         path: ${{github.workspace}}/wheelhouse/*.whl
+        if-no-files-found: error
+
+    - name: Upload a Build Artifact
+      if: runner.os == 'Linux'
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: libpython
+        path: /usr/lib/x86_64-linux-gnu/libpython3.5m.so.1.0
         if-no-files-found: error
 
     - name: Upload a Build Artifact
