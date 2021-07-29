@@ -26,7 +26,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install System Requirements
+    - name: Install cibuildwheel
+      shell: bash
+      run: pip install cibuildwheel==2.0.1
+
+    - name: Build wheels
       if: runner.os == 'Linux'
       shell: bash
       run: |
@@ -39,105 +43,12 @@ jobs:
         sudo apt-get install --no-install-recommends libboost-all-dev -y
         sudo apt-get install libopenblas-dev liblapack-dev libatlas-base-dev -y
         sudo apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev -y
-
-    - name: Install System Requirements
-      if: runner.os == 'Macos'
-      shell: bash
-      run: |
-        brew install -vd snappy leveldb gflags glog szip lmdb
-        brew install hdf5 openblas
-        brew install -vd protobuf
-        brew install -vd boost boost-python3
-
-    - name: Setup Python
-      if: runner.os != 'Macos'
-      uses: actions/setup-python@v2.2.1
-      with:
-        python-version: 3.7
-
-    - name: Setup Python
-      if: runner.os == 'Macos'
-      uses: actions/setup-python@v2.2.1
-      with:
-        python-version: 3.9
-
-    - name: Install Numpy
-      if: runner.os != 'Macos'
-      shell: bash
-      run: |
         pip install numpy==1.19.2
-
-    - name: Install Numpy
-      if: runner.os == 'Macos'
-      shell: bash
-      run: |
-        pip install numpy==1.17.5
-
-    - name: Configure CMake
-      if: runner.os == 'Linux'
-      shell: bash
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: |
         sudo unlink /usr/lib/x86_64-linux-gnu/libboost_python.so
         sudo ln -s /usr/lib/x86_64-linux-gnu/libboost_python-py36.so /usr/lib/x86_64-linux-gnu/libboost_python.so
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF
-
-    - name: Configure CMake
-      if: runner.os == 'Macos'
-      shell: bash
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: |
-        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF
-
-    - name: Build
-      if: runner.os != 'Windows'
-      shell: bash
-      # Build your program with the given configuration
-      run: |
         cd ${{github.workspace}}/build && sudo make all && sudo make pycaffe
 
-    - name: Upload a Build Artifact
-      if: runner.os == 'Linux'
-      uses: actions/upload-artifact@v2.2.2
-      with:
-        name: libcaffe-linux
-        path: ${{github.workspace}}/build/lib/libcaffe.so.1.0.0
-        if-no-files-found: error
-
-    - name: Upload a Build Artifact
-      if: runner.os == 'Macos'
-      uses: actions/upload-artifact@v2.2.2
-      with:
-        name: libcaffe-macos
-        path: ${{github.workspace}}/build/lib/libcaffe.1.0.0.dylib
-        if-no-files-found: error
-
-    - name: Upload a Build Artifact
-      if: runner.os == 'Linux'
-      uses: actions/upload-artifact@v2.2.2
-      with:
-        name: caffe-linux
-        path: ${{github.workspace}}/build/lib/_caffe.so
-        if-no-files-found: error
-
-    - name: Upload a Build Artifact
-      if: runner.os == 'Macos'
-      uses: actions/upload-artifact@v2.2.2
-      with:
-        name: caffe-macos
-        path: ${{github.workspace}}/build/lib/_caffe.dylib
-        if-no-files-found: error
-
-    - name: Install cibuildwheel
-      shell: bash
-      run: pip install cibuildwheel==2.0.1
-
-    - name: Build wheels
-      if: runner.os == 'Linux'
-      shell: bash
-      run: |
         cd ${{github.workspace}}/python && mkdir wheelhouse
         python -m cibuildwheel --output-dir wheelhouse
       env:
@@ -150,6 +61,14 @@ jobs:
       if: runner.os == 'Macos'
       shell: bash
       run: |
+        brew install -vd snappy leveldb gflags glog szip lmdb
+        brew install hdf5 openblas
+        brew install -vd protobuf
+        brew install -vd boost boost-python3
+        pip install numpy==1.17.5
+        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF
+        cd ${{github.workspace}}/build && sudo make all && sudo make pycaffe
+
         cd ${{github.workspace}}/python && mkdir wheelhouse
         python -m cibuildwheel --output-dir wheelhouse
       env:
@@ -168,9 +87,41 @@ jobs:
         if-no-files-found: error
 
     - name: Upload a Build Artifact
+      if: runner.os == 'Linux'
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: libcaffe-linux
+        path: ${{github.workspace}}/build/lib/libcaffe.so.1.0.0
+        if-no-files-found: error
+
+    - name: Upload a Build Artifact
+      if: runner.os == 'Linux'
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: caffe-linux
+        path: ${{github.workspace}}/build/lib/_caffe.so
+        if-no-files-found: error
+
+    - name: Upload a Build Artifact
       if: runner.os == 'Macos'
       uses: actions/upload-artifact@v2.2.2
       with:
         name: warpctc-caffe-macos
         path: ./python/wheelhouse/*.whl
+        if-no-files-found: error
+
+    - name: Upload a Build Artifact
+      if: runner.os == 'Macos'
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: libcaffe-macos
+        path: ${{github.workspace}}/build/lib/libcaffe.1.0.0.dylib
+        if-no-files-found: error
+
+    - name: Upload a Build Artifact
+      if: runner.os == 'Macos'
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: caffe-macos
+        path: ${{github.workspace}}/build/lib/_caffe.dylib
         if-no-files-found: error
