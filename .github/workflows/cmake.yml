@@ -15,12 +15,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04]
+        os: [ubuntu-18.04,macos-10.15]
         include:
           - os: ubuntu-18.04
             bitness: 64
-       #   - os: macos-10.15
-       #     bitness: 64
+          - os: macos-10.15
+            bitness: 64
 
     steps:
     - uses: actions/checkout@v2
@@ -45,16 +45,14 @@ jobs:
         sudo apt-get install python3.7-dev
         sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.7 100
         sudo apt-get install python-pip
-        python --version
         pip install -U pip
-        pip --version
         pip install numpy==1.19.2
         sudo unlink /usr/lib/x86_64-linux-gnu/libboost_python.so
         sudo ln -s /usr/lib/x86_64-linux-gnu/libboost_python-py36.so /usr/lib/x86_64-linux-gnu/libboost_python.so
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF
         cd ${{github.workspace}}/build && sudo make all && sudo make pycaffe
 
-        cd ${{github.workspace}}/python && mkdir wheelhouse
+        cd ../python && mkdir wheelhouse
         python -m cibuildwheel --output-dir wheelhouse
       env:
         CIBW_PLATFORM: "linux"
@@ -70,13 +68,14 @@ jobs:
         brew install hdf5 openblas
         brew install -vd protobuf
         brew install -vd boost boost-python3
-        python --version
+        brew install python@3.9
+        python3 --version
         pip --version
-        pip show numpy
+        pip install numpy==1.17.5
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF
         cd ${{github.workspace}}/build && sudo make all && sudo make pycaffe
 
-        cd ${{github.workspace}}/python && mkdir wheelhouse
+        cd ../python && mkdir wheelhouse
         python -m cibuildwheel --output-dir wheelhouse
       env:
         CIBW_PLATFORM: "macos"
