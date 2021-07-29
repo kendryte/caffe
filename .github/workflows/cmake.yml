@@ -33,6 +33,7 @@ jobs:
       if: runner.os == 'Linux'
       shell: bash
       run: |
+        python --version
         sudo apt-get update
         sudo apt install gcc-10 g++-10
         sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100
@@ -63,6 +64,7 @@ jobs:
       if: runner.os == 'Macos'
       shell: bash
       run: |
+        python --version
         brew install -vd snappy leveldb gflags glog szip lmdb
         brew install hdf5 openblas
         brew install -vd protobuf
@@ -86,7 +88,7 @@ jobs:
       uses: actions/upload-artifact@v2.2.2
       with:
         name: warpctc-caffe-linux
-        path: ./python/wheelhouse/*.whl
+        path: ${{github.workspace}}/python/wheelhouse/*.whl
         if-no-files-found: error
 
     - name: Upload a Build Artifact
@@ -110,7 +112,7 @@ jobs:
       uses: actions/upload-artifact@v2.2.2
       with:
         name: warpctc-caffe-macos
-        path: ./python/wheelhouse/*.whl
+        path: ${{github.workspace}}/python/wheelhouse/*.whl
         if-no-files-found: error
 
     - name: Upload a Build Artifact
