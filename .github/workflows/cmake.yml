@@ -56,6 +56,9 @@ jobs:
           cd ./build &&
           make all && 
           make pycaffe &&
+          echo "jizhao test" &&
+          find . -name libcaffe.so.1.0.0 &&
+          find . -name _caffe.so &&
           cd ..
       shell: bash
       run: |
@@ -81,9 +84,6 @@ jobs:
           cd ./build &&
           make all &&
           make pycaffe &&
-          echo "jizhao test" &&
-          find . -name libcaffe.so.1.0.0 &&
-          find . -name _caffe.so &&
           cd ..
       shell: bash
       run: |
