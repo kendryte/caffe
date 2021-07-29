@@ -47,7 +47,7 @@ jobs:
         CIBW_ARCHS: "x86_64"
         CIBW_PLATFORM: "linux"
         CIBW_BUILD: "cp37-*"
-        CIBW_REPAIR_WHEEL_COMMAND: "auditwheel repair --lib-sdir libpython -w {dest_dir} {wheel}"
+        CIBW_REPAIR_WHEEL_COMMAND: ""
         CIBW_MANYLINUX_X86_64_IMAGE: "manylinux_2_24"
         CIBW_BEFORE_BUILD_LINUX: >
           apt-get update &&
@@ -63,9 +63,7 @@ jobs:
           cd ./build &&
           make all && 
           make pycaffe &&
-          cd .. &&
-          mkdir libpython &&
-          cp /usr/lib/x86_64-linux-gnu/libpython3.5m.so.1.0 libpython
+          cd ..
       shell: bash
       run: |
         python -m cibuildwheel --output-dir wheelhouse
