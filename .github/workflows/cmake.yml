@@ -102,14 +102,6 @@ jobs:
         if-no-files-found: error
 
     - name: Upload a Build Artifact
-      if: runner.os == 'Linux'
-      uses: actions/upload-artifact@v2.2.2
-      with:
-        name: libpython
-        path: /usr/lib/x86_64-linux-gnu/libpython3.5m.so.1.0
-        if-no-files-found: error
-
-    - name: Upload a Build Artifact
       if: runner.os == 'Macos'
       uses: actions/upload-artifact@v2.2.2
       with:
