@@ -56,9 +56,7 @@ jobs:
           cd ./build &&
           make all && 
           make pycaffe &&
-          echo "jizhao test" &&
-          find . -name libcaffe.so.1.0.0 &&
-          find . -name _caffe.so &&
+          cp ./lib/libcaffe.so.1.0.0 ../python/caffe &&
           cd ..
       shell: bash
       run: |
@@ -84,6 +82,7 @@ jobs:
           cd ./build &&
           make all &&
           make pycaffe &&
+          cp ./lib/libcaffe.1.0.0.dylib ../python/caffe &&
           cd ..
       shell: bash
       run: |
@@ -98,41 +97,9 @@ jobs:
         if-no-files-found: error
 
     - name: Upload a Build Artifact
-      if: runner.os == 'Linux'
-      uses: actions/upload-artifact@v2.2.2
-      with:
-        name: libcaffe-linux
-        path: /project/build/lib/libcaffe.so.1.0.0
-        if-no-files-found: error
-
-    - name: Upload a Build Artifact
-      if: runner.os == 'Linux'
-      uses: actions/upload-artifact@v2.2.2
-      with:
-        name: caffe-linux
-        path: /project/build/lib/_caffe.so
-        if-no-files-found: error
-
-    - name: Upload a Build Artifact
       if: runner.os == 'Macos'
       uses: actions/upload-artifact@v2.2.2
       with:
         name: warpctc-caffe-macos
         path: ${{github.workspace}}/wheelhouse/*.whl
-        if-no-files-found: error
-
-    - name: Upload a Build Artifact
-      if: runner.os == 'Macos'
-      uses: actions/upload-artifact@v2.2.2
-      with:
-        name: libcaffe-macos
-        path: /project/build/lib/libcaffe.1.0.0.dylib
-        if-no-files-found: error
-
-    - name: Upload a Build Artifact
-      if: runner.os == 'Macos'
-      uses: actions/upload-artifact@v2.2.2
-      with:
-        name: caffe-macos
-        path: /project/build/lib/_caffe.dylib
         if-no-files-found: error
