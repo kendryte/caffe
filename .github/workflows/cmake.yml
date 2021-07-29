@@ -38,7 +38,14 @@ jobs:
         CIBW_REPAIR_WHEEL_COMMAND: ""
         CIBW_MANYLINUX_X86_64_IMAGE: "manylinux_2_24"
         CIBW_BEFORE_ALL: >
+          make --version &&
+          cmake --version &&
+          gcc --version &&
+          add-apt-repository ppa:ubuntu-toolchain-r/test &&
           apt-get update &&
+          apt install gcc-10 &&
+          apt install g++-10 &&
+          gcc --version &&
           apt-get install libegl1-mesa-dev -y &&
           apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler -y &&
           apt-get install --no-install-recommends libboost-all-dev -y &&
