@@ -47,7 +47,11 @@ jobs:
           pip install numpy==1.19.2 &&
           unlink /usr/lib/x86_64-linux-gnu/libboost_python.so &&
           ln -s /usr/lib/x86_64-linux-gnu/libboost_python-py36.so /usr/lib/x86_64-linux-gnu/libboost_python.so &&
+          echo "jizhao1" &&
+          ls ./ &&
+          echo "jizhao2" &&
           cd ../ &&
+          ls ./ &&
           cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           cd ./build &&
           make all && 
