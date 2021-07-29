@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04, macos-10.15]
+        os: [ubuntu-18.04]
         include:
           - os: ubuntu-18.04
             bitness: 64
@@ -42,6 +42,11 @@ jobs:
         sudo apt-get install --no-install-recommends libboost-all-dev -y
         sudo apt-get install libopenblas-dev liblapack-dev libatlas-base-dev -y
         sudo apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev -y
+        python --version
+        sudo apt-get install python3.7-dev
+        sudo apt-get install python-pip
+        python --version
+        pip install -U pip
         pip --version
         pip show numpy
         sudo unlink /usr/lib/x86_64-linux-gnu/libboost_python.so
@@ -65,6 +70,7 @@ jobs:
         brew install hdf5 openblas
         brew install -vd protobuf
         brew install -vd boost boost-python3
+        python --version
         pip --version
         pip show numpy
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF
