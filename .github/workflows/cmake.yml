@@ -40,6 +40,8 @@ jobs:
         CIBW_BEFORE_ALL: >
           echo "jizhao test00" &&
           ls ./ &&
+          echo "jizhao test01" &&
+          ls /project &&
           apt-get update &&
           apt-get install libegl1-mesa-dev -y &&
           apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler -y &&
