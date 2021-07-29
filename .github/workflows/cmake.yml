@@ -53,11 +53,10 @@ jobs:
           cd ./build &&
           make all && 
           make pycaffe &&
-          cd ${{github.workspace}}/python &&
+          cd ../ &&
           mkdir wheelhouse
       shell: bash
       run: |
-        cd ${{github.workspace}}/python
         python -m cibuildwheel --output-dir wheelhouse
 
     - name: Build wheels
@@ -85,7 +84,6 @@ jobs:
           brew uninstall python@3.9
       shell: bash
       run: |
-        cd ${{github.workspace}}/python
         python -m cibuildwheel --output-dir wheelhouse
 
     - name: Upload a Build Artifact
