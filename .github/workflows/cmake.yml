@@ -16,21 +16,18 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-18.04, macos-10.15]
-        manylinux_image: [manylinux2014]
         include:
           - os: ubuntu-18.04
             bitness: 64
-            platform_id: manylinux_x86_64
           - os: macos-10.15
             bitness: 64
-            platform_id: macosx_x86_64
 
     steps:
     - uses: actions/checkout@v2
 
     - name: Install cibuildwheel
       shell: bash
-      run: pip install cibuildwheel
+      run: python -m pip install cibuildwheel==2.0.1
 
     - name: Build wheels
       if: runner.os == 'Linux'
@@ -58,7 +55,6 @@ jobs:
         CIBW_BUILD: "cp37-*"
         CIBW_ARCHS_LINUX: "x86_64"
         CIBW_REPAIR_WHEEL_COMMAND: ""
-        CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.manylinux_image }}
 
     - name: Build wheels
       if: runner.os == 'Macos'
@@ -75,7 +71,6 @@ jobs:
         cd ${{github.workspace}}/python && mkdir wheelhouse
         python -m cibuildwheel --output-dir wheelhouse
       env:
-        CIBW_BEFORE_ALL: "export MACOSX_DEPLOYMENT_TARGET=10.15"
         CIBW_PLATFORM: "macos"
         CIBW_BUILD: "cp39-*"
         CIBW_ARCHS_MACOS: "x86_64"
