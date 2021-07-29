@@ -15,9 +15,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04]
+        os: [ubuntu-latest]
         include:
-          - os: ubuntu-18.04
+          - os: ubuntu-latest
             bitness: 64
           # - os: macos-10.15
           #   bitness: 64
