@@ -25,6 +25,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install cibuildwheel
+      shell: bash
+      run: pip install cibuildwheel
+
     - name: Build wheels
       if: runner.os == 'Linux'
       env:
@@ -34,7 +38,7 @@ jobs:
         CIBW_REPAIR_WHEEL_COMMAND: ""
         CIBW_MANYLINUX_X86_64_IMAGE: "manylinux_2_24"
         CIBW_BEFORE_BUILD:
-          "apt-get update &&
+          "python --version && apt-get update &&
           apt install gcc-10 g++-10 &&
           update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100 &&
           update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 &&
@@ -53,7 +57,7 @@ jobs:
           cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           cd ${{github.workspace}}/build && make all && make pycaffe &&
           cd ${{github.workspace}}/python && mkdir wheelhouse &&
-          pip install cibuildwheel"
+          update-alternatives --install /usr/bin/python python /usr/bin/python2.7 200"
       shell: bash
       run: |
         cd ${{github.workspace}}/python
