@@ -48,8 +48,13 @@ jobs:
           unlink /usr/lib/x86_64-linux-gnu/libboost_python.so &&
           ln -s /usr/lib/x86_64-linux-gnu/libboost_python-py36.so /usr/lib/x86_64-linux-gnu/libboost_python.so &&
           cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
-          ls -l ${{github.workspace}} &&
-          cd ${{github.workspace}}/build && 
+          echo "jizhao test1" &&
+          ls -l /home/runner/work/caffe &&
+          echo "jizhao test2" &&
+          ls -l /home/runner/work/caffe/caffe &&
+          cd ${{github.workspace}}/build &&
+          echo "jizhao test3" &&
+          ls -l ./
           make all && 
           make pycaffe &&
           cd ${{github.workspace}}/python &&
