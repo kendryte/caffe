@@ -43,7 +43,7 @@ jobs:
         sudo apt-get install python-pip
         pip install -U pip
         pip install numpy==1.19.2
-        pip install bashlex==0.14
+        pip install bashlex
         pip install cibuildwheel
         sudo unlink /usr/lib/x86_64-linux-gnu/libboost_python.so
         sudo ln -s /usr/lib/x86_64-linux-gnu/libboost_python-py36.so /usr/lib/x86_64-linux-gnu/libboost_python.so
@@ -68,7 +68,7 @@ jobs:
         brew install python@3.9
         pip install -U pip
         pip install numpy==1.16.6
-        pip install bashlex==0.14
+        pip install bashlex
         pip install cibuildwheel
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF
         cd ${{github.workspace}}/build && sudo make all && sudo make pycaffe
