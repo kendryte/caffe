@@ -42,7 +42,8 @@ jobs:
         sudo apt-get install --no-install-recommends libboost-all-dev -y
         sudo apt-get install libopenblas-dev liblapack-dev libatlas-base-dev -y
         sudo apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev -y
-        pip install numpy==1.19.2
+        pip --version
+        pip show numpy
         sudo unlink /usr/lib/x86_64-linux-gnu/libboost_python.so
         sudo ln -s /usr/lib/x86_64-linux-gnu/libboost_python-py36.so /usr/lib/x86_64-linux-gnu/libboost_python.so
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF
@@ -64,7 +65,8 @@ jobs:
         brew install hdf5 openblas
         brew install -vd protobuf
         brew install -vd boost boost-python3
-        pip install numpy==1.17.5
+        pip --version
+        pip show numpy
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF
         cd ${{github.workspace}}/build && sudo make all && sudo make pycaffe
 
