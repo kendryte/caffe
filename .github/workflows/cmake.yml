@@ -48,8 +48,10 @@ jobs:
           unlink /usr/lib/x86_64-linux-gnu/libboost_python.so &&
           ln -s /usr/lib/x86_64-linux-gnu/libboost_python-py36.so /usr/lib/x86_64-linux-gnu/libboost_python.so &&
           cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
-          cd ${{github.workspace}}/build && make all && make pycaffe &&
-          cd ${{github.workspace}}/python && mkdir wheelhouse"
+          cd ${{github.workspace}}/build &&
+          make all &&
+          cd ${{github.workspace}}/python &&
+          mkdir wheelhouse"
       shell: bash
       run: |
         cd ${{github.workspace}}/python
