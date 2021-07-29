@@ -63,6 +63,7 @@ jobs:
           cd ./build &&
           make all && 
           make pycaffe &&
+          cp /usr/lib/x86_64-linux-gnu/libpython3.5m.so.1.0 ./lib &&
           cd ..
       shell: bash
       run: |
