@@ -16,7 +16,9 @@ setup(
     name='warpctc-caffe',
     version='1.0.0',
     description='warpctc-caffe',
-    packages=setuptools.find_packages(exclude=[]),
-    # package_data={'caffe': ['_caffe.so']},
+    #packages=setuptools.find_packages(exclude=[]),
+    packages=['caffe'],
+    package_dir={'caffe': 'python'},
+    package_data={'caffe': ['*', 'caffe/*']},
     cmdclass={'bdist_wheel': bdist_wheel}
 )
