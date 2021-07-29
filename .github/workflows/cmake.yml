@@ -41,8 +41,11 @@ jobs:
           make --version &&
           cmake --version &&
           apt-get update &&
+          apt-get install software-properties-common &&
+          add-apt-repository ppa:ubuntu-toolchain-r/test &&
           apt install gcc-10 &&
           apt install g++-10 &&
+          gcc --version &&
           apt-get install libegl1-mesa-dev -y &&
           apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler -y &&
           apt-get install --no-install-recommends libboost-all-dev -y &&
