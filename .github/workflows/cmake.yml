@@ -25,11 +25,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install cibuildwheel
+      shell: bash
+      run: pip install cibuildwheel
+
     - name: Build wheels
       if: runner.os == 'Linux'
       shell: bash
       run: |
-        pip install cibuildwheel
         which python
         sudo apt-get update
         sudo apt install gcc-10 g++-10
@@ -63,7 +66,6 @@ jobs:
       if: runner.os == 'Macos'
       shell: bash
       run: |
-        pip install cibuildwheel
         which python
         brew install -vd snappy leveldb gflags glog szip lmdb
         brew install hdf5 openblas
