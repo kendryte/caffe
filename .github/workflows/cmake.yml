@@ -56,7 +56,6 @@ jobs:
           cd ./build &&
           make all && 
           make pycaffe &&
-          cp ./lib/libcaffe.so.1.0.0 ../python/caffe &&
           cd ..
       shell: bash
       run: |
@@ -82,7 +81,6 @@ jobs:
           cd ./build &&
           make all &&
           make pycaffe &&
-          cp ./lib/libcaffe.1.0.0.dylib ../python/caffe &&
           cd ..
       shell: bash
       run: |
