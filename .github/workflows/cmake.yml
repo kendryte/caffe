@@ -33,7 +33,6 @@ jobs:
       if: runner.os == 'Linux'
       shell: bash
       run: |
-        which python
         sudo apt-get update
         sudo apt install gcc-10 g++-10
         sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100
@@ -48,14 +47,12 @@ jobs:
         sudo apt-get install python-pip
         pip install -U pip
         pip install numpy==1.19.2
-        pip install bashlex
         sudo unlink /usr/lib/x86_64-linux-gnu/libboost_python.so
         sudo ln -s /usr/lib/x86_64-linux-gnu/libboost_python-py36.so /usr/lib/x86_64-linux-gnu/libboost_python.so
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF
         cd ${{github.workspace}}/build && sudo make all && sudo make pycaffe
         cd ${{github.workspace}}/python && mkdir wheelhouse
-        which python
-        python -m cibuildwheel --output-dir wheelhouse
+        /usr/bin/python -m cibuildwheel --output-dir wheelhouse
       env:
         CIBW_PLATFORM: "linux"
         CIBW_BUILD: "cp37-*"
@@ -66,7 +63,6 @@ jobs:
       if: runner.os == 'Macos'
       shell: bash
       run: |
-        which python
         brew install -vd snappy leveldb gflags glog szip lmdb
         brew install hdf5 openblas
         brew install -vd protobuf
@@ -74,12 +70,10 @@ jobs:
         brew install python@3.9
         pip install -U pip
         pip install numpy==1.16.6
-        pip install bashlex
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF
         cd ${{github.workspace}}/build && sudo make all && sudo make pycaffe
         cd ${{github.workspace}}/python && mkdir wheelhouse
-        which python
-        python -m cibuildwheel --output-dir wheelhouse
+        /usr/local/bin/python -m cibuildwheel --output-dir wheelhouse
       env:
         CIBW_PLATFORM: "macos"
         CIBW_BUILD: "cp39-*"
