@@ -38,7 +38,7 @@ jobs:
         CIBW_REPAIR_WHEEL_COMMAND: ""
         CIBW_MANYLINUX_X86_64_IMAGE: "manylinux_2_24"
         CIBW_BEFORE_BUILD:
-          "apt-get update &&
+          "cmake --version && g++ --version && apt-get update &&
           apt-get install libegl1-mesa-dev -y &&
           apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler -y &&
           apt-get install --no-install-recommends libboost-all-dev -y &&
