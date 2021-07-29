@@ -49,14 +49,14 @@ jobs:
           ln -s /usr/lib/x86_64-linux-gnu/libboost_python-py36.so /usr/lib/x86_64-linux-gnu/libboost_python.so &&
           cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           echo "jizhao test0" &&
-          ls -l ${{github.workspace}} &&
+          ls ${{github.workspace}} &&
           echo "jizhao test1" &&
-          ls -l /home/runner/work/caffe &&
+          ls /home/runner/work/caffe &&
           echo "jizhao test2" &&
-          ls -l /home/runner/work/caffe/caffe &&
+          ls /home/runner/work/caffe/caffe &&
           cd ${{github.workspace}}/build &&
           echo "jizhao test3" &&
-          ls -l ./ &&
+          ls ./ &&
           make all && 
           make pycaffe &&
           cd ${{github.workspace}}/python &&
