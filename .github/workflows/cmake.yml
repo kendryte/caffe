@@ -76,7 +76,7 @@ jobs:
           brew install -vd boost boost-python3 &&
           brew install python@3.9 &&
           pip install -U pip &&
-          pip install numpy==1.16.6 &&
+          pip install numpy==1.17.5 &&
           cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           cd ./build &&
           make all &&
@@ -99,7 +99,7 @@ jobs:
       uses: actions/upload-artifact@v2.2.2
       with:
         name: libcaffe-linux
-        path: ${{github.workspace}}/build/lib/libcaffe.so.1.0.0
+        path: /project/build/lib/libcaffe.so.1.0.0
         if-no-files-found: error
 
     - name: Upload a Build Artifact
@@ -107,7 +107,7 @@ jobs:
       uses: actions/upload-artifact@v2.2.2
       with:
         name: caffe-linux
-        path: ${{github.workspace}}/build/lib/_caffe.so
+        path: /project/build/lib/_caffe.so
         if-no-files-found: error
 
     - name: Upload a Build Artifact
@@ -123,7 +123,7 @@ jobs:
       uses: actions/upload-artifact@v2.2.2
       with:
         name: libcaffe-macos
-        path: ${{github.workspace}}/build/lib/libcaffe.1.0.0.dylib
+        path: /project/build/lib/libcaffe.1.0.0.dylib
         if-no-files-found: error
 
     - name: Upload a Build Artifact
@@ -131,5 +131,5 @@ jobs:
       uses: actions/upload-artifact@v2.2.2
       with:
         name: caffe-macos
-        path: ${{github.workspace}}/build/lib/_caffe.dylib
+        path: /project/build/lib/_caffe.dylib
         if-no-files-found: error
