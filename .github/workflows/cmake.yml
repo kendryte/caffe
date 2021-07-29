@@ -38,7 +38,8 @@ jobs:
         CIBW_PLATFORM: "linux"
         CIBW_BUILD: "cp37-*"
         CIBW_ARCHS_LINUX: "x86_64"
-        CIBW_REPAIR_WHEEL_COMMAND:
+        CIBW_REPAIR_WHEEL_COMMAND: ""
+        CIBW_BEFORE_BUILD:
           sudo apt-get update &&
           sudo apt install gcc-10 g++-10 &&
           sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100 &&
@@ -59,7 +60,6 @@ jobs:
           cd ${{github.workspace}}/build && sudo make all && sudo make pycaffe &&
           cd ${{github.workspace}}/python && mkdir wheelhouse &&
           sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 200 &&
-        CIBW_BEFORE_BUILD: python --version
 
     - name: Build wheels
       if: runner.os == 'Macos'
