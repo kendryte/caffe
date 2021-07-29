@@ -38,10 +38,6 @@ jobs:
         CIBW_REPAIR_WHEEL_COMMAND: ""
         CIBW_MANYLINUX_X86_64_IMAGE: "manylinux_2_24"
         CIBW_BEFORE_ALL: >
-          echo "jizhao test00" &&
-          ls ./ &&
-          echo "jizhao test02" &&
-          ls ./caffe &&
           apt-get update &&
           apt-get install libegl1-mesa-dev -y &&
           apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler -y &&
@@ -51,16 +47,9 @@ jobs:
           pip install numpy==1.19.2 &&
           unlink /usr/lib/x86_64-linux-gnu/libboost_python.so &&
           ln -s /usr/lib/x86_64-linux-gnu/libboost_python-py36.so /usr/lib/x86_64-linux-gnu/libboost_python.so &&
-          cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
-          echo "jizhao test0" &&
-          ls ${{github.workspace}} &&
-          echo "jizhao test1" &&
-          ls /home/runner/work/caffe &&
-          echo "jizhao test2" &&
-          ls /home/runner/work/caffe/caffe &&
-          cd ${{github.workspace}}/build &&
-          echo "jizhao test3" &&
-          ls ./ &&
+          cd ../ &&
+          cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
+          cd ./build &&
           make all && 
           make pycaffe &&
           cd ${{github.workspace}}/python &&
