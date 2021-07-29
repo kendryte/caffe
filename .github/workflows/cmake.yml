@@ -40,7 +40,6 @@ jobs:
         CIBW_BEFORE_ALL: >
           make --version &&
           cmake --version &&
-          add-apt-repository ppa:ubuntu-toolchain-r/test &&
           apt-get update &&
           apt install gcc-10 &&
           apt install g++-10 &&
