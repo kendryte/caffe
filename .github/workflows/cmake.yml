@@ -62,11 +62,15 @@ jobs:
           apt-get install --no-install-recommends libboost-all-dev -y &&
           apt-get install libopenblas-dev liblapack-dev libatlas-base-dev -y &&
           apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev -y &&
-          pip install numpy &&
+          pip install numpy==1.19.2 &&
+          unlink /usr/lib/x86_64-linux-gnu/libboost_python.so &&
+          ln -s /usr/lib/x86_64-linux-gnu/libboost_python-py35.so /usr/lib/x86_64-linux-gnu/libboost_python.so &&
           cmake -G Ninja -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           cd ./build &&
           ninja all &&
           ninja pycaffe &&
+          cp /usr/lib/x86_64-linux-gnu/libpython3.5m.so.1.0 ./lib &&
+          cp /usr/lib/x86_64-linux-gnu/libboost_python-py35.so.1.62.0 ./lib &&
           cd ..
       shell: bash
       run: |
@@ -87,7 +91,7 @@ jobs:
           brew install -vd boost boost-python3 &&
           brew install python@3.9 &&
           pip install -U pip &&
-          pip install numpy &&
+          pip install numpy==1.17.5 &&
           cmake -G Ninja -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           cd ./build &&
           ninja all &&

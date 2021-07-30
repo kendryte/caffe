@@ -147,7 +147,6 @@ endif()
 if(BUILD_python)
   if(NOT "${python_version}" VERSION_LESS "3")
     # use python3
-    set(Python_ADDITIONAL_VERSIONS ${python_version})
     find_package(PythonInterp)
     find_package(PythonLibs)
     find_package(NumPy)
