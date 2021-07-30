@@ -62,15 +62,11 @@ jobs:
           apt-get install --no-install-recommends libboost-all-dev -y &&
           apt-get install libopenblas-dev liblapack-dev libatlas-base-dev -y &&
           apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev -y &&
-          pip install numpy==1.19.2 &&
-          unlink /usr/lib/x86_64-linux-gnu/libboost_python.so &&
-          ln -s /usr/lib/x86_64-linux-gnu/libboost_python-py35.so /usr/lib/x86_64-linux-gnu/libboost_python.so &&
-          cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
+          pip install numpy &&
+          cmake -G Ninja -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           cd ./build &&
-          make all &&
-          make pycaffe &&
-          cp /usr/lib/x86_64-linux-gnu/libpython3.5m.so.1.0 ./lib &&
-          cp /usr/lib/x86_64-linux-gnu/libboost_python-py35.so.1.62.0 ./lib &&
+          ninja all &&
+          ninja pycaffe &&
           cd ..
       shell: bash
       run: |
@@ -91,11 +87,11 @@ jobs:
           brew install -vd boost boost-python3 &&
           brew install python@3.9 &&
           pip install -U pip &&
-          pip install numpy==1.17.5 &&
-          cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
+          pip install numpy &&
+          cmake -G Ninja -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           cd ./build &&
-          make all &&
-          make pycaffe &&
+          ninja all &&
+          ninja pycaffe &&
           cd ..
       shell: bash
       run: |
@@ -109,10 +105,10 @@ jobs:
         CIBW_BUILD: "cp37-*"
         CIBW_REPAIR_WHEEL_COMMAND: ""
         CIBW_BEFORE_BUILD_MACOS: >
-          cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
+          cmake -G Ninja -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           cd ./build &&
-          make all &&
-          make pycaffe &&
+          ninja all &&
+          ninja pycaffe &&
           cd ..
       shell: bash
       run: |
