@@ -15,14 +15,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest,macos-10.15,windows-2019]
+        os: [ubuntu-latest]
         include:
           - os: ubuntu-latest
             bitness: 64
-          - os: macos-10.15
-            bitness: 64
-          - os: windows-2019
-            bitness: 32
+          # - os: macos-10.15
+          #   bitness: 64
+          # - os: windows-2019
+          #   bitness: 32
 
     steps:
     - uses: actions/checkout@v2
@@ -57,9 +57,13 @@ jobs:
         CIBW_MANYLINUX_X86_64_IMAGE: "manylinux_2_24"
         CIBW_BEFORE_BUILD_LINUX: >
           apt-get update &&
+          echo "test1" &&
+          python --version &&
+          echo "test2" &&
+          ls /usr/lib/x86_64-linux-gnu/libboost_python* &&
           apt-get install libegl1-mesa-dev -y &&
           apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libhdf5-serial-dev protobuf-compiler -y &&
-          apt-get install --no-install-recommends libboost-all-dev -y &&
+          apt-get install --no-install-recommends libboost-dev libboost-all-dev -y &&
           apt-get install libopenblas-dev liblapack-dev libatlas-base-dev -y &&
           apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev -y &&
           pip install numpy==1.19.2 &&
@@ -108,7 +112,7 @@ jobs:
         CIBW_PLATFORM: "windows"
         CIBW_BUILD: "cp37-*"
         CIBW_REPAIR_WHEEL_COMMAND: ""
-        CIBW_BEFORE_BUILD_MACOS: >
+        CIBW_BEFORE_BUILD_WINDOW: >
           cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           cd ./build &&
           make all &&
