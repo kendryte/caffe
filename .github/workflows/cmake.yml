@@ -51,6 +51,13 @@ jobs:
         CIBW_MANYLINUX_X86_64_IMAGE: "manylinux_2_24"
         CIBW_BEFORE_BUILD_LINUX: >
           apt-get update &&
+          echo "test1" &&
+          python --version &&
+          apt-get install python3.7-dev &&
+          sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.7 100 &&
+          sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.5 50 &&
+          echo "test2" &&
+          python --version &&
           apt-get install libegl1-mesa-dev -y &&
           apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libhdf5-serial-dev protobuf-compiler -y &&
           apt-get install --no-install-recommends libboost-all-dev -y &&
