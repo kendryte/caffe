@@ -22,7 +22,7 @@ jobs:
           - os: macos-10.15
             bitness: 64
           - os: windows-2019
-            bitness: 64
+            bitness: 32
 
     steps:
     - uses: actions/checkout@v2
@@ -104,7 +104,7 @@ jobs:
     - name: Build wheels
       if: runner.os == 'Windows'
       env:
-        CIBW_ARCHS: "x86_64"
+        CIBW_ARCHS: "x86"
         CIBW_PLATFORM: "windows"
         CIBW_BUILD: "cp37-*"
         CIBW_REPAIR_WHEEL_COMMAND: ""
