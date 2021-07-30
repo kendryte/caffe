@@ -57,6 +57,8 @@ jobs:
           apt-get install libopenblas-dev liblapack-dev libatlas-base-dev -y &&
           apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev -y &&
           pip install numpy==1.19.2 &&
+          echo "test lib" &&
+          ls /usr/lib/x86_64-linux-gnu/libboost_python-py* &&
           unlink /usr/lib/x86_64-linux-gnu/libboost_python.so &&
           ln -s /usr/lib/x86_64-linux-gnu/libboost_python-py36.so /usr/lib/x86_64-linux-gnu/libboost_python.so &&
           cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
