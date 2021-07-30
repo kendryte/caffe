@@ -19,6 +19,6 @@ setup(
     #packages=setuptools.find_packages(exclude=[]),
     packages=['caffe'],
     package_dir={'caffe': 'python'},
-    package_data={'caffe': ['*', 'caffe/*']},
+    package_data={'caffe': ['*', 'caffe/*', 'caffe/proto/*']},
     cmdclass={'bdist_wheel': bdist_wheel}
 )
