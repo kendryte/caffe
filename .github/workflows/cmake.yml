@@ -15,18 +15,20 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest,macos-10.15]
+        os: [ubuntu-latest,macos-10.15,windows-2019]
         include:
           - os: ubuntu-latest
             bitness: 64
           - os: macos-10.15
+            bitness: 64
+          - os: windows-2019
             bitness: 64
 
     steps:
     - uses: actions/checkout@v2
 
     - name: Setup Python
-      if: runner.os == 'Linux'
+      if: runner.os != 'Macos'
       uses: actions/setup-python@v2.2.1
       with:
         python-version: 3.7
@@ -36,6 +38,10 @@ jobs:
       uses: actions/setup-python@v2.2.1
       with:
         python-version: 3.9
+
+    - name: Add msbuild to PATH
+      if: runner.os == 'Windows'
+      uses: ilammy/msvc-dev-cmd@v1.9.0
 
     - name: Install cibuildwheel
       shell: bash
@@ -95,6 +101,23 @@ jobs:
       run: |
         python -m cibuildwheel --output-dir wheelhouse
 
+    - name: Build wheels
+      if: runner.os == 'Windows'
+      env:
+        CIBW_ARCHS: "x86_64"
+        CIBW_PLATFORM: "windows"
+        CIBW_BUILD: "cp37-*"
+        CIBW_REPAIR_WHEEL_COMMAND: ""
+        CIBW_BEFORE_BUILD_MACOS: >
+          cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
+          cd ./build &&
+          make all &&
+          make pycaffe &&
+          cd ..
+      shell: bash
+      run: |
+        python -m cibuildwheel --output-dir wheelhouse
+
     - name: Upload a Build Artifact
       if: runner.os == 'Linux'
       uses: actions/upload-artifact@v2.2.2
@@ -108,5 +131,13 @@ jobs:
       uses: actions/upload-artifact@v2.2.2
       with:
         name: warpctc-caffe-macos
+        path: ${{github.workspace}}/wheelhouse/*.whl
+        if-no-files-found: error
+
+    - name: Upload a Build Artifact
+      if: runner.os == 'Windows'
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: warpctc-caffe-windows
         path: ${{github.workspace}}/wheelhouse/*.whl
         if-no-files-found: error
