@@ -26,6 +26,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - uses: seanmiddleditch/gha-setup-ninja@master
 
     - name: Setup Python
       if: runner.os != 'Macos'
