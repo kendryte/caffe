@@ -51,13 +51,6 @@ jobs:
         CIBW_MANYLINUX_X86_64_IMAGE: "manylinux_2_24"
         CIBW_BEFORE_BUILD_LINUX: >
           apt-get update &&
-          echo "test1" &&
-          python --version &&
-          apt-get install python3.7-dev &&
-          sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.7 100 &&
-          sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.5 50 &&
-          echo "test2" &&
-          python --version &&
           apt-get install libegl1-mesa-dev -y &&
           apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libhdf5-serial-dev protobuf-compiler -y &&
           apt-get install --no-install-recommends libboost-all-dev -y &&
@@ -65,14 +58,14 @@ jobs:
           apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev -y &&
           pip install numpy==1.19.2 &&
           echo "test lib" &&
-          ls /usr/lib/x86_64-linux-gnu/libboost_python-py* &&
           unlink /usr/lib/x86_64-linux-gnu/libboost_python.so &&
-          ln -s /usr/lib/x86_64-linux-gnu/libboost_python-py36.so /usr/lib/x86_64-linux-gnu/libboost_python.so &&
+          ln -s /usr/lib/x86_64-linux-gnu/libboost_python-py35.so /usr/lib/x86_64-linux-gnu/libboost_python.so &&
           cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           cd ./build &&
           make all && 
           make pycaffe &&
           cp /usr/lib/x86_64-linux-gnu/libpython3.5m.so.1.0 ./lib &&
+          cp /usr/lib/x86_64-linux-gnu/libboost_python-py35.so.1.62.0 ./lib &&
           cd ..
       shell: bash
       run: |
