@@ -26,7 +26,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: seanmiddleditch/gha-setup-ninja@master
 
     - name: Setup Python
       if: runner.os != 'Macos'
@@ -66,10 +65,10 @@ jobs:
           pip install numpy==1.19.2 &&
           unlink /usr/lib/x86_64-linux-gnu/libboost_python.so &&
           ln -s /usr/lib/x86_64-linux-gnu/libboost_python-py35.so /usr/lib/x86_64-linux-gnu/libboost_python.so &&
-          cmake -G Ninja -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
+          cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           cd ./build &&
-          ninja all &&
-          ninja pycaffe &&
+          make all &&
+          make pycaffe &&
           cp /usr/lib/x86_64-linux-gnu/libpython3.5m.so.1.0 ./lib &&
           cp /usr/lib/x86_64-linux-gnu/libboost_python-py35.so.1.62.0 ./lib &&
           cd ..
@@ -93,10 +92,10 @@ jobs:
           brew install python@3.9 &&
           pip install -U pip &&
           pip install numpy==1.17.5 &&
-          cmake -G Ninja -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
+          cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           cd ./build &&
-          ninja all &&
-          ninja pycaffe &&
+          make all &&
+          make pycaffe &&
           cd ..
       shell: bash
       run: |
@@ -110,10 +109,10 @@ jobs:
         CIBW_BUILD: "cp37-*"
         CIBW_REPAIR_WHEEL_COMMAND: ""
         CIBW_BEFORE_BUILD_MACOS: >
-          cmake -G Ninja -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
+          cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           cd ./build &&
-          ninja all &&
-          ninja pycaffe &&
+          make all &&
+          make pycaffe &&
           cd ..
       shell: bash
       run: |
