@@ -51,18 +51,18 @@ jobs:
         CIBW_MANYLINUX_X86_64_IMAGE: "manylinux_2_24"
         CIBW_BEFORE_BUILD_LINUX: >
           apt-get update &&
+          apt-get install libpython3.7-dev &&
           apt-get install libegl1-mesa-dev -y &&
           apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libhdf5-serial-dev protobuf-compiler -y &&
           apt-get install --no-install-recommends libboost-all-dev -y &&
           apt-get install libopenblas-dev liblapack-dev libatlas-base-dev -y &&
           apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev -y &&
           pip install numpy==1.19.2 &&
-          echo "test lib" &&
           unlink /usr/lib/x86_64-linux-gnu/libboost_python.so &&
           ln -s /usr/lib/x86_64-linux-gnu/libboost_python-py35.so /usr/lib/x86_64-linux-gnu/libboost_python.so &&
           cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           cd ./build &&
-          make all && 
+          make all &&
           make pycaffe &&
           cp /usr/lib/x86_64-linux-gnu/libpython3.5m.so.1.0 ./lib &&
           cp /usr/lib/x86_64-linux-gnu/libboost_python-py35.so.1.62.0 ./lib &&
