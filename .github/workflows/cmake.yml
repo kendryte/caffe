@@ -88,6 +88,8 @@ jobs:
           pip install numpy==1.17.5 &&
           cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           cd ./build &&
+          echo "test1" &&
+          cat CMakeCache.txt &&
           make all &&
           make pycaffe &&
           cd ..
