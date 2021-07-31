@@ -49,7 +49,6 @@ jobs:
         CIBW_ARCHS: "x86_64"
         CIBW_PLATFORM: "linux"
         CIBW_BUILD: "cp37-*"
-        CIBW_PROJECT_REQUIRES_PYTHON: "3.7"
         CIBW_REPAIR_WHEEL_COMMAND: ""
         CIBW_MANYLINUX_X86_64_IMAGE: "manylinux_2_24"
         CIBW_BEFORE_BUILD_LINUX: >
