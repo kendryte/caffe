@@ -15,12 +15,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest,macos-10.15]
         include:
           - os: ubuntu-latest
             bitness: 64
-          # - os: macos-10.15
-          #   bitness: 64
+          - os: macos-10.15
+            bitness: 64
           # - os: windows-2019
           #   bitness: 32
 
@@ -39,10 +39,6 @@ jobs:
       with:
         python-version: 3.9
 
-    - name: Add msbuild to PATH
-      if: runner.os == 'Windows'
-      uses: ilammy/msvc-dev-cmd@v1.9.0
-
     - name: Install cibuildwheel
       shell: bash
       run: pip install cibuildwheel
@@ -53,14 +49,11 @@ jobs:
         CIBW_ARCHS: "x86_64"
         CIBW_PLATFORM: "linux"
         CIBW_BUILD: "cp37-*"
+        CIBW_PROJECT_REQUIRES_PYTHON: "3.7"
         CIBW_REPAIR_WHEEL_COMMAND: ""
         CIBW_MANYLINUX_X86_64_IMAGE: "manylinux_2_24"
         CIBW_BEFORE_BUILD_LINUX: >
           apt-get update &&
-          echo "test1" &&
-          python --version &&
-          echo "test2" &&
-          ls /usr/lib/x86_64-linux-gnu/libboost_python* &&
           apt-get install libegl1-mesa-dev -y &&
           apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libhdf5-serial-dev protobuf-compiler -y &&
           apt-get install --no-install-recommends libboost-dev libboost-all-dev -y &&
@@ -89,12 +82,18 @@ jobs:
         CIBW_REPAIR_WHEEL_COMMAND: ""
         CIBW_ENVIRONMENT: MACOSX_DEPLOYMENT_TARGET=10.15
         CIBW_BEFORE_BUILD_MACOS: >
+          echo "test1" &&
+          which python &&
+          echo "test2" &&
+          python --version &&
+          echo "test3" &&
+          python2 --version &&
+          echo "test4" &&
+          python3 --version &&
           brew install -vd snappy leveldb gflags glog szip lmdb &&
           brew install hdf5 openblas &&
           brew install -vd protobuf &&
           brew install -vd boost boost-python3 &&
-          brew install python@3.9 &&
-          pip install -U pip &&
           pip install numpy==1.17.5 &&
           cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           cd ./build &&
@@ -105,22 +104,22 @@ jobs:
       run: |
         python -m cibuildwheel --output-dir wheelhouse
 
-    - name: Build wheels
-      if: runner.os == 'Windows'
-      env:
-        CIBW_ARCHS: "x86"
-        CIBW_PLATFORM: "windows"
-        CIBW_BUILD: "cp37-*"
-        CIBW_REPAIR_WHEEL_COMMAND: ""
-        CIBW_BEFORE_BUILD_WINDOW: >
-          cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
-          cd ./build &&
-          make all &&
-          make pycaffe &&
-          cd ..
-      shell: bash
-      run: |
-        python -m cibuildwheel --output-dir wheelhouse
+    # - name: Build wheels
+    #   if: runner.os == 'Windows'
+    #   env:
+    #     CIBW_ARCHS: "x86"
+    #     CIBW_PLATFORM: "windows"
+    #     CIBW_BUILD: "cp37-*"
+    #     CIBW_REPAIR_WHEEL_COMMAND: ""
+    #     CIBW_BEFORE_BUILD_WINDOW: >
+    #       cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
+    #       cd ./build &&
+    #       make all &&
+    #       make pycaffe &&
+    #       cd ..
+    #   shell: bash
+    #   run: |
+    #     python -m cibuildwheel --output-dir wheelhouse
 
     - name: Upload a Build Artifact
       if: runner.os == 'Linux'
@@ -138,10 +137,10 @@ jobs:
         path: ${{github.workspace}}/wheelhouse/*.whl
         if-no-files-found: error
 
-    - name: Upload a Build Artifact
-      if: runner.os == 'Windows'
-      uses: actions/upload-artifact@v2.2.2
-      with:
-        name: warpctc-caffe-windows
-        path: ${{github.workspace}}/wheelhouse/*.whl
-        if-no-files-found: error
+    # - name: Upload a Build Artifact
+    #   if: runner.os == 'Windows'
+    #   uses: actions/upload-artifact@v2.2.2
+    #   with:
+    #     name: warpctc-caffe-windows
+    #     path: ${{github.workspace}}/wheelhouse/*.whl
+    #     if-no-files-found: error
