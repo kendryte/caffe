@@ -85,7 +85,7 @@ jobs:
           wget -c https://github.com/aaltonenzhang/homebrew-core/blob/master/Formula/protobuf.rb &&
           wget -c https://github.com/aaltonenzhang/homebrew-core/blob/master/Formula/boost@1.59.rb &&
           wget -c https://github.com/aaltonenzhang/homebrew-core/blob/master/Formula/boost-python@1.59.rb &&
-          brew install --with-python -vd protobuf.rb &&
+          brew install -vd protobuf.rb &&
           brew install -vd boost@1.59.rb &&
           brew install -vd boost-python@1.59.rb &&
           brew link boost@1.59 --force &&
