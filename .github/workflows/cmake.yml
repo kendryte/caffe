@@ -82,8 +82,8 @@ jobs:
           brew install -vd snappy leveldb gflags glog szip lmdb &&
           brew install hdf5 openblas &&
           wget -c https://github.com/protocolbuffers/protobuf/archive/refs/tags/v3.17.3.zip &&
-          unzip protobuf-3.17.3.zip &&
-          cd protobuf-3.17.3 &&
+          unzip v3.17.3.zip &&
+          cd v3.17.3 &&
           ./autogen.sh &&
           ./configure &&
           make &&
