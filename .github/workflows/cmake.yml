@@ -81,8 +81,8 @@ jobs:
         CIBW_BEFORE_BUILD_MACOS: >
           brew install -vd snappy leveldb gflags glog szip lmdb &&
           brew install hdf5 openblas &&
-          brew install -vd protobuf &&
-          brew install -vd boost boost-python3 &&
+          brew install --build-from-source --with-python -vd protobuf &&
+          brew install --build-from-source -vd boost boost-python3 &&
           pip install numpy==1.17.5 &&
           cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
           cd ./build &&
