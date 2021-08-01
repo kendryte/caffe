@@ -81,7 +81,18 @@ jobs:
         CIBW_BEFORE_BUILD_MACOS: >
           brew install -vd snappy leveldb gflags glog szip lmdb &&
           brew install hdf5 openblas &&
-          brew install --build-from-source --with-python -vd protobuf@3.6 &&
+          wget -c https://github.com/protocolbuffers/protobuf/archive/v3.17.3.zip &&
+          unzip protobuf-3.17.3.zip &&
+          cd protobuf-3.17.3 &&
+          ./autogen.sh &&
+          ./configure &&
+          make &&
+          make install &&
+          cd python &&
+          python setup.py build &&
+          python setup.py test &&
+          python setup.py install &&
+          cd ../../ &&
           brew install --build-from-source -vd boost boost-python3 &&
           pip install numpy==1.17.5 &&
           cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
