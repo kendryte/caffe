@@ -88,6 +88,7 @@ jobs:
           cd ./build &&
           make all &&
           make pycaffe &&
+          echo "tesl lib" && ls && cd lib && otool -L _caffe.so && cd.. &&
           cd ..
       shell: bash
       run: |
