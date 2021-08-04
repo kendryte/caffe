@@ -100,6 +100,7 @@ jobs:
           cd ./build &&
           make all &&
           make pycaffe &&
+          echo "caffe dylib deps" && cd lib && otool -L _caffe.dylib && echo "libcaffe dylib deps" && otool -L libcaffe.1.0.0.dylib && cd .. &&
           cd ..
       shell: bash
       run: |
