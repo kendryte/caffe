@@ -21,8 +21,6 @@ jobs:
             bitness: 64
           - os: macos-10.15
             bitness: 64
-          # - os: windows-2019
-          #   bitness: 32
 
     steps:
     - uses: actions/checkout@v2
@@ -100,28 +98,10 @@ jobs:
           cd ./build &&
           make all &&
           make pycaffe &&
-          echo "caffe dylib deps" && cd lib && otool -L _caffe.dylib && echo "libcaffe dylib deps" && otool -L libcaffe.1.0.0.dylib && cd .. &&
           cd ..
       shell: bash
       run: |
         python -m cibuildwheel --output-dir wheelhouse
-
-    # - name: Build wheels
-    #   if: runner.os == 'Windows'
-    #   env:
-    #     CIBW_ARCHS: "x86"
-    #     CIBW_PLATFORM: "windows"
-    #     CIBW_BUILD: "cp37-*"
-    #     CIBW_REPAIR_WHEEL_COMMAND: ""
-    #     CIBW_BEFORE_BUILD_WINDOW: >
-    #       cmake -B ./build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_OPENCV=OFF &&
-    #       cd ./build &&
-    #       make all &&
-    #       make pycaffe &&
-    #       cd ..
-    #   shell: bash
-    #   run: |
-    #     python -m cibuildwheel --output-dir wheelhouse
 
     - name: Upload a Build Artifact
       if: runner.os == 'Linux'
@@ -138,11 +118,3 @@ jobs:
         name: warpctc-caffe-macos
         path: ${{github.workspace}}/wheelhouse/*.whl
         if-no-files-found: error
-
-    # - name: Upload a Build Artifact
-    #   if: runner.os == 'Windows'
-    #   uses: actions/upload-artifact@v2.2.2
-    #   with:
-    #     name: warpctc-caffe-windows
-    #     path: ${{github.workspace}}/wheelhouse/*.whl
-    #     if-no-files-found: error
