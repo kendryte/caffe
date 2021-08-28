@@ -18,7 +18,6 @@
 # Compiled protocol buffers
 *.pb.h
 *.pb.cc
-*_pb2.py
 
 # Compiled python
 *.pyc
@@ -78,9 +77,13 @@ build
 distribute/*
 *.testbin
 *.bin
-python/caffe/proto/
 cmake_build
 .cmake_build
+*.egg-info/
+dist/
+
+# clangd
+.cache/
 
 # Generated documentation
 docs/_site

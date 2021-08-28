@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.7)
+cmake_minimum_required(VERSION 3.18)
 if(POLICY CMP0046)
   cmake_policy(SET CMP0046 NEW)
 endif()
@@ -16,7 +16,6 @@ add_definitions(-DCAFFE_VERSION=${CAFFE_TARGET_VERSION})
 
 # ---[ Using cmake scripts and modules
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules)
-
 include(ExternalProject)
 include(GNUInstallDirs)
 
@@ -30,7 +29,7 @@ include(cmake/ConfigGen.cmake)
 caffe_option(CPU_ONLY  "Build Caffe without CUDA support" ON) # TODO: rename to USE_CUDA
 caffe_option(USE_CUDNN "Build Caffe with cuDNN library support" ON IF NOT CPU_ONLY)
 caffe_option(USE_NCCL "Build Caffe with NCCL library support" OFF)
-caffe_option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+caffe_option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 caffe_option(BUILD_python "Build Python wrapper" ON)
 set(python_version "3" CACHE STRING "Specify which Python version to use")
 caffe_option(BUILD_matlab "Build Matlab wrapper" OFF IF UNIX OR APPLE)
@@ -44,6 +43,30 @@ caffe_option(USE_OPENMP "Link with OpenMP (when your BLAS wants OpenMP and you g
 
 # This code is taken from https://github.com/sh1r0/caffe-android-lib
 caffe_option(USE_HDF5 "Build with hdf5" ON)
+
+include(cmake/configure-conan.cmake)
+include(cmake/conan.cmake)
+
+if(NOT CONAN_EXPORTED) 
+    conan_check()
+    conan_add_remote(NAME sunnycase URL https://conan.sunnycase.moe INDEX 0)
+endif()
+
+set(CMAKE_SKIP_RPATH OFF)
+if (APPLE)
+    set(CMAKE_MACOSX_RPATH TRUE)
+    set(CMAKE_INSTALL_RPATH "@loader_path/../lib")
+    set(CMAKE_INSTALL_NAME_DIR "@rpath")
+else ()
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/..lib")
+endif()
+
+conan_cmake_run(CONANFILE conanfile.py
+                BASIC_SETUP TARGETS
+                OPTIONS ${CONAN_OPTS}
+                SETTINGS ${CONAN_SETTINGS}
+                BUILD missing)
+include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
 
 # ---[ Dependencies
 include(cmake/Dependencies.cmake)

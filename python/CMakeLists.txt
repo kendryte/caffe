@@ -5,11 +5,16 @@ endif()
 
 file(GLOB_RECURSE python_srcs ${PROJECT_SOURCE_DIR}/python/*.cpp)
 
-add_library(pycaffe SHARED ${python_srcs})
+add_library(pycaffe MODULE ${python_srcs})
 caffe_default_properties(pycaffe)
 set_target_properties(pycaffe PROPERTIES PREFIX "" OUTPUT_NAME "_caffe")
-target_include_directories(pycaffe PUBLIC ${PYTHON_INCLUDE_DIRS} ${NUMPY_INCLUDE_DIR})
-target_link_libraries(pycaffe PUBLIC ${Caffe_LINK} ${PYTHON_LIBRARIES})
+target_link_libraries(pycaffe PUBLIC ${Caffe_LINK} Python3::Python Python3::NumPy)
+
+if (APPLE)
+    set_target_properties(pycaffe PROPERTIES INSTALL_RPATH "@loader_path/..;@loader_path")
+else()
+    set_target_properties(pycaffe PROPERTIES INSTALL_RPATH "$ORIGIN/..;$ORIGIN")
+endif()
 
 if(UNIX OR APPLE)
     set(__linkname "${PROJECT_SOURCE_DIR}/python/caffe/_caffe.so")

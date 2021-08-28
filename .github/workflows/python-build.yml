@@ -1,0 +1,50 @@
+name: python-build
+
+on:
+  push:
+    branches: [ nncase ]
+  pull_request:
+    branches: [ nncase ]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04]
+          
+    steps:
+    - uses: actions/checkout@v2
+    - uses: seanmiddleditch/gha-setup-ninja@master
+    
+    - name: Setup Python
+      uses: actions/setup-python@v2.2.1
+      with:
+        python-version: 3.7
+
+    - name: Install cibuildwheel
+      run: pip install cibuildwheel
+        
+    - name: Install System Requirements
+      if: runner.os == 'Macos'
+      shell: bash
+      run: |
+        brew install sunnycase/core/libomp@11.1.0
+        
+    - name: Add msbuild to PATH
+      if: runner.os == 'Windows'
+      uses: ilammy/msvc-dev-cmd@v1.9.0
+      
+    - name: Build wheel
+      run: python -m cibuildwheel --output-dir wheelhouse
+      
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: caffe-python
+        path: ${{github.workspace}}/wheelhouse
+        if-no-files-found: error
