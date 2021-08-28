@@ -134,30 +134,6 @@ list(APPEND Caffe_LINKER_LIBS PRIVATE BLAS::BLAS)
 find_package(Python3 COMPONENTS Interpreter Development NumPy REQUIRED)
 
 if(BUILD_python)
- #if(NOT "${python_version}" VERSION_LESS "3")
- #  # use python3
- #  find_package(PythonInterp)
- #  find_package(PythonLibs)
- #  find_package(NumPy)
- #  # Find the matching boost python implementation
- #  set(version ${PYTHONLIBS_VERSION_STRING})
-
- #  STRING( REGEX REPLACE "[^0-9]" "" boost_py_version ${version} )
- #  find_package(Boost COMPONENTS "python-py${boost_py_version}")
- #  set(Boost_PYTHON_FOUND ${Boost_PYTHON-PY${boost_py_version}_FOUND})
-
- #  while(NOT "${version}" STREQUAL "" AND NOT Boost_PYTHON_FOUND)
- #    STRING( REGEX REPLACE "([0-9.]+).[0-9]+" "\\1" version ${version} )
-
- #    STRING( REGEX REPLACE "[^0-9]" "" boost_py_version ${version} )
- #    find_package(Boost COMPONENTS "python-py${boost_py_version}")
- #    set(Boost_PYTHON_FOUND ${Boost_PYTHON-PY${boost_py_version}_FOUND})
-
- #    STRING( REGEX MATCHALL "([0-9.]+).[0-9]+" has_more_version ${version} )
- #    if("${has_more_version}" STREQUAL "")
- #      break()
- #    endif()
- #  endwhile()
   set(HAVE_PYTHON TRUE)
   if(BUILD_python_layer)
     list(APPEND Caffe_DEFINITIONS PRIVATE -DWITH_PYTHON_LAYER)

@@ -9,6 +9,7 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
+*.pyd
 
 # Compiled Static libraries
 *.lai

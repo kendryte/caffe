@@ -35,6 +35,8 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"
   target_link_options(caffe PUBLIC -Wl,-force_load $<TARGET_FILE:caffe>)
 elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   target_link_options(caffe PUBLIC -Wl,--whole-archive $<TARGET_FILE:caffe> -Wl,--no-whole-archive)
+elseif(MSVC)
+  target_link_options(caffe PUBLIC /WHOLEARCHIVE:$<TARGET_FILE:caffe>)
 endif()
 
 set_target_properties(caffe PROPERTIES
