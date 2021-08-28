@@ -154,7 +154,7 @@ class TestPythonLayer(unittest.TestCase):
         if os.name == 'nt':
         # On Windows, attempting to remove a file that is in use
         # causes an exception to be raised."
-          os.close(h)
+            os.close(h)
         os.remove(caffemodel_file)
         
         # Test weight sharing
