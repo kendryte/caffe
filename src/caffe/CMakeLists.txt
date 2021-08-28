@@ -29,6 +29,14 @@ target_compile_definitions(caffe ${Caffe_DEFINITIONS})
 if(Caffe_COMPILE_OPTIONS)
   target_compile_options(caffe ${Caffe_COMPILE_OPTIONS})
 endif()
+
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"
+  OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
+  target_link_options(caffe PUBLIC -Wl,-force_load $<TARGET_FILE:caffe>)
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  target_link_options(caffe PUBLIC -Wl,--whole-archive $<TARGET_FILE:caffe> -Wl,--no-whole-archive)
+endif()
+
 set_target_properties(caffe PROPERTIES
     VERSION   ${CAFFE_TARGET_VERSION}
     SOVERSION ${CAFFE_TARGET_SOVERSION}

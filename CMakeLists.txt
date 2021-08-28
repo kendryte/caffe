@@ -52,15 +52,6 @@ if(NOT CONAN_EXPORTED)
     conan_add_remote(NAME sunnycase URL https://conan.sunnycase.moe INDEX 0)
 endif()
 
-set(CMAKE_SKIP_RPATH OFF)
-if (APPLE)
-    set(CMAKE_MACOSX_RPATH TRUE)
-    set(CMAKE_INSTALL_RPATH "@loader_path/../lib")
-    set(CMAKE_INSTALL_NAME_DIR "@rpath")
-else ()
-    set(CMAKE_INSTALL_RPATH "$ORIGIN/..lib")
-endif()
-
 conan_cmake_run(CONANFILE conanfile.py
                 BASIC_SETUP TARGETS
                 OPTIONS ${CONAN_OPTS}
