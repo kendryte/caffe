@@ -52,15 +52,6 @@ if(NOT CONAN_EXPORTED)
     conan_add_remote(NAME sunnycase URL https://conan.sunnycase.moe INDEX 0)
 endif()
 
-set(CMAKE_SKIP_RPATH OFF)
-if (APPLE)
-    set(CMAKE_MACOSX_RPATH TRUE)
-    set(CMAKE_INSTALL_RPATH "@loader_path/../lib")
-    set(CMAKE_INSTALL_NAME_DIR "@rpath")
-else ()
-    set(CMAKE_INSTALL_RPATH "$ORIGIN/..lib")
-endif()
-
 conan_cmake_run(CONANFILE conanfile.py
                 BASIC_SETUP TARGETS
                 OPTIONS ${CONAN_OPTS}
@@ -76,6 +67,10 @@ if(UNIX OR APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wall")
 endif()
 
+if(MSVC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /utf-8 /W3 /D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS /D_CRT_SECURE_NO_WARNINGS /DNOMINMAX /DHAVE_CXX11_ATOMIC /DOS_WINDOWS")
+endif()
+
 caffe_set_caffe_link()
 
 if(USE_libstdcpp)
@@ -84,7 +79,9 @@ if(USE_libstdcpp)
 endif()
 
 # ---[ Warnings
-caffe_warnings_disable(CMAKE_CXX_FLAGS -Wno-sign-compare -Wno-uninitialized)
+if(MSVC)
+  caffe_warnings_disable(CMAKE_CXX_FLAGS -Wno-sign-compare -Wno-uninitialized)
+endif()
 
 # ---[ Config generation
 configure_file(cmake/Templates/caffe_config.h.in "${PROJECT_BINARY_DIR}/caffe_config.h")
