@@ -128,6 +128,7 @@ if(APPLE)
 endif()
 
 find_package(BLAS REQUIRED)
+list(APPEND Caffe_LINKER_LIBS PRIVATE BLAS::BLAS)
 
 # ---[ Python
 find_package(Python3 COMPONENTS Interpreter Development NumPy REQUIRED)
