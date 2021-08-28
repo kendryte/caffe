@@ -163,7 +163,7 @@ if(BUILD_python)
   set(HAVE_PYTHON TRUE)
   if(BUILD_python_layer)
     list(APPEND Caffe_DEFINITIONS PRIVATE -DWITH_PYTHON_LAYER)
-    list(APPEND Caffe_LINKER_LIBS PRIVATE Python3::Python Python3::NumPy)
+    list(APPEND Caffe_LINKER_LIBS PRIVATE Python3::Module Python3::NumPy)
   endif()
 endif()
 
