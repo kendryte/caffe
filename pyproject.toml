@@ -2,7 +2,7 @@
 requires-python = ">=3.6"
 
 [build-system]
-requires = ["setuptools>=42", "wheel", "conan", "numpy", "ninja"]
+requires = ["setuptools>=42", "wheel", "conan", "oldest-supported-numpy; python_version>='3.6'", "ninja"]
 
 [tool.cibuildwheel]
 build = ["cp36-*", "cp37-*", "cp38-*", "cp39-*"]
