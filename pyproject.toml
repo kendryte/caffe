@@ -5,7 +5,7 @@ requires-python = ">=3.6"
 requires = ["setuptools>=42", "wheel", "conan", "oldest-supported-numpy", "ninja"]
 
 [tool.cibuildwheel]
-build = ["cp39-*"]
+build = ["cp36-*", "cp37-*", "cp38-*", "cp39-*"]
 manylinux-x86_64-image = "sunnycase/manylinux_2_24_x86_64:version1.1"
 test-requires = ["pytest", "pydot", "numpy==1.19.5"]
 test-command = [
