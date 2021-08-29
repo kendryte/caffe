@@ -6,6 +6,7 @@ requires = ["setuptools>=42", "wheel", "conan", "numpy==1.19", "ninja"]
 
 [tool.cibuildwheel]
 build = ["cp39-*"]
+manylinux-x86_64-image = "sunnycase/manylinux_2_24_x86_64:version1.1"
 test-requires = ["pytest", "pydot"]
 test-command = [
   "pytest {project}/python/caffe/test"
@@ -20,7 +21,8 @@ before-all = [
 [tool.cibuildwheel.linux]
 archs = ["x86_64"]
 before-all = [
-  "yum install graphviz -y",
+  "apt update",
+  "apt install graphviz -y",
   "pip install conan",
   "conan profile new default --detect",
   "conan profile update settings.compiler.libcxx=libstdc++11 default"
