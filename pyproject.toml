@@ -2,11 +2,10 @@
 requires-python = ">=3.6"
 
 [build-system]
-requires = ["setuptools>=42", "wheel", "conan", "oldest-supported-numpy; python_version>='3.6'", "ninja"]
+requires = ["setuptools>=42", "wheel", "conan", "numpy==1.19", "ninja"]
 
 [tool.cibuildwheel]
-build = ["cp36-*", "cp37-*", "cp38-*", "cp39-*"]
-manylinux-x86_64-image = "sunnycase/manylinux_2_24_x86_64:version1.1"
+build = ["cp39-*"]
 test-requires = ["pytest", "pydot"]
 test-command = [
   "pytest {project}/python/caffe/test"
@@ -21,8 +20,7 @@ before-all = [
 [tool.cibuildwheel.linux]
 archs = ["x86_64"]
 before-all = [
-  "apt update",
-  "apt install graphviz -y",
+  "yum install graphviz -y",
   "pip install conan",
   "conan profile new default --detect",
   "conan profile update settings.compiler.libcxx=libstdc++11 default"

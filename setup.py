@@ -188,7 +188,7 @@ class BuildCMakeExt(build_ext):
         cmake_args += ['-DPython3_ROOT_DIR=' + os.path.dirname(sys.executable)]
 
         cfg = 'Debug' if self.debug else 'Release'
-        build_args = ['--config', cfg]
+        build_args = ['--config', cfg, '-t', 'pycaffe']
         cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
         install_args = ['--prefix', bin_dir]
 
